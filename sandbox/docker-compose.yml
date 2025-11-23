@@ -1,0 +1,67 @@
+version: "3.8"
+
+services:
+  browser:
+    build: ./browser
+    depends_on:
+      - dns
+    networks:
+      sandbox-net:
+        aliases: [browser]
+    dns:
+      - 172.28.0.10
+    read_only: true
+    tmpfs: ["/tmp"]
+    volumes:
+      - browser-profile:/home/nonroot/.config/chromium
+      - logs:/var/log/sandbox
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+
+  proxy:
+    build: ./proxy
+    depends_on:
+      - dns
+    networks:
+      sandbox-net:
+        aliases: [proxy]
+    dns:
+      - 172.28.0.10
+    cap_add: [NET_ADMIN]
+    volumes:
+      - logs:/var/log/sandbox
+
+  logger:
+    build: ./logger
+    depends_on:
+      - dns
+    networks:
+      sandbox-net:
+        aliases: [logger]
+    dns:
+      - 172.28.0.10
+    cap_add: [NET_ADMIN, NET_RAW]
+    volumes:
+      - logs:/var/log/sandbox
+
+  dns:
+    build: ./dns
+    networks:
+      sandbox-net:
+        ipv4_address: 172.28.0.10
+    cap_add: [NET_ADMIN]
+    volumes:
+      - ./dns/blocklist.conf:/etc/dnsmasq.d/blocklist.conf:ro
+
+networks:
+  sandbox-net:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.28.0.0/24
+
+volumes:
+  browser-profile:
+  logs:

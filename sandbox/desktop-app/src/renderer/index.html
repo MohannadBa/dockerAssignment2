@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studyjam Sandbox Controller</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>Studyjam Sandbox</h1>
+        <p>
+          Manage your isolated browser, network, and logging stack with a single click.
+        </p>
+      </header>
+
+      <section class="controls">
+        <div class="control-group">
+          <button id="startBtn" class="primary">Start Sandbox</button>
+          <button id="stopBtn" class="warn">Stop Sandbox</button>
+          <button id="resetBtn">Full Reset</button>
+        </div>
+        <div class="status-panel">
+          <h2>Current Status</h2>
+          <pre id="statusText">Loading...</pre>
+        </div>
+      </section>
+
+      <section class="features">
+        <h2>What’s Inside</h2>
+        <ul>
+          <li><strong>Browser container:</strong> Chromium runs in an isolated, read-only filesystem.</li>
+          <li><strong>Logged network traffic:</strong> The logger captures packets and keeps replayable pcaps.</li>
+          <li><strong>Private network:</strong> Every service lives on the internal `sandbox-net` bridge.</li>
+          <li><strong>Controlled DNS:</strong> dnsmasq enforces your blocklist for deterministic browsing.</li>
+          <li><strong>Auto reset:</strong> Stop or reset to tear everything down and start fresh.</li>
+        </ul>
+      </section>
+
+      <section class="logs">
+        <div class="logs-header">
+          <h2>Live Logs</h2>
+          <button id="refreshLogsBtn">Refresh</button>
+        </div>
+        <pre id="logsOutput">No logs yet. Start the sandbox to capture activity.</pre>
+      </section>
+    </main>
+    <script src="./renderer.js"></script>
+  </body>
+</html>
+
